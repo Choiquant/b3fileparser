@@ -4,7 +4,7 @@ import b3fileparser.b3_meta_data as meta_data
 
 
 class B3ParserPandas(B3ParserBase):
-    def read_b3_file(self, file_path, file_type='path') -> pd.DataFrame:
+    def read_b3_file(self, file_path, file_type='path', batch = "") -> pd.DataFrame:
         """
         Reads financial data from a Brazilian B3 file, supporting both plaintext and zipped formats.
 
@@ -37,6 +37,7 @@ class B3ParserPandas(B3ParserBase):
             names=list(meta_data.FIELD_SIZES.keys()),
             widths=list(meta_data.FIELD_SIZES.values()),
             encoding='latin1',
+            chunksize = batch
         )[1:-1]  # Skip potential header and footer rows
         
         df["TIPO_DE_MERCADO"] = df["TIPO_DE_MERCADO"].apply(lambda x: meta_data.MARKETS.get(x, x))
